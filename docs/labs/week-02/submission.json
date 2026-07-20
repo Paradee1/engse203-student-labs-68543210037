@@ -10,6 +10,6 @@
   "notes": "นำ Vite build output ที่มี index.html เข้า publish/",
   "pageUrl": "https://Paradee1.github.io/engse203-student-labs-68543210037/labs/week-02/",
   "sourceUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/tree/lab/week-02/labs/week-02/source",
-  "hasPublish": true,
+  "hasPublish": false,
   "sourceEntries": 9
 }
