@@ -4,7 +4,7 @@
   "status": "submitted",
   "originalRepoUrl": "https://github.com/Paradee1/engse203-lab02-68543210037-6",
   "originalCommit": "b63bfc6",
-  "pullRequestUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/compare/lab/week-02?expand=1",
+  "pullRequestUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/pull/2",
   "submissionTag": "lab-02-submission-v1",
   "testStatus": "pass",
   "notes": "นำ Vite build output ที่มี index.html เข้า publish/"
