@@ -32,16 +32,16 @@
   {
     "week": "week-03",
     "title": "Responsive Web UI & Form Interaction",
-    "status": "draft",
-    "originalRepoUrl": "",
-    "originalCommit": "",
+    "status": "ready",
+    "originalRepoUrl": "https://github.com/Paradee1/engse203-lab03-68543210037-6",
+    "originalCommit": "c22fc24",
     "pullRequestUrl": "",
-    "submissionTag": "",
-    "testStatus": "not-tested",
+    "submissionTag": "lab-03-submission-v1",
+    "testStatus": "pass",
     "notes": "Static site ต้องมี index.html ที่ publish root",
     "pageUrl": "https://Paradee1.github.io/engse203-student-labs-68543210037/labs/week-03/",
     "sourceUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/tree/lab/week-03/labs/week-03/source",
-    "hasPublish": false,
-    "sourceEntries": 0
+    "hasPublish": true,
+    "sourceEntries": 12
   }
 ]
