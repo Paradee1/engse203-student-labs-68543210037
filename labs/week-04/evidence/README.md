@@ -64,13 +64,13 @@ RequestList ทำหน้าที่ map ข้อมูลและส่ง
 | TC-03 Invalid | กรอกข้อมูลไม่ครบ กดส่งแล้วไม่เพิ่มรายการ พร้อมแสดง Error ใกล้ Field | PASS | <img src="img/TC3.png" width="300" /> |
 | TC-04 Valid add | เพิ่มคำร้องใหม่สถานะ pending ยอดสรุปอัปเดต และฟอร์ม reset | PASS | <img src="img/TC4.png" width="300" /> |
 | TC-05 Filter | เลือกกรองตามสถานะ แสดงเฉพาะรายการตรงกับเงื่อนไข | PASS | <img src="img/TC5.png" width="300" /> |
-| TC-06 All | เลือกตัวกรอง "ทั้งหมด" ระบบกลับมาแสดงคำร้องครบทุกรายการ | TODO | <img src="img/TC6.png" width="300" /> |
-| TC-07 Empty | เลือกสถานะที่ไม่พบรายการ แสดงข้อความ Empty State | TODO | <img src="img/TC7.png" width="300" /> |
-| TC-08 Delete | กดลบรายการ ลบข้อมูลตรงตาม ID และ Summary คำนวณใหม่ | TODO | <img src="img/TC8.png" width="300" /> |
-| TC-09 Mobile | แสดงผลบนขนาดหน้าจอ 375px สมบูรณ์ ไม่มี Horizontal Scroll | TODO | <img src="img/TC9.png" width="300" /> |
-| TC-10 Keyboard | สามารถใช้ปุ่ม Tab / Space / Enter โฟกัสและส่งฟอร์มได้ | TODO | <img src="img/TC10.png" width="300" /> |
-| TC-11 Build | รัน npm run build ผ่านสมบูรณ์ สร้างไฟล์ลง dist/ | TODO | <img src="img/TC11.png" width="300" /> |
-| TC-12 Pages | เปิดผ่าน GitHub Pages บน Incognito Mode ทำงานถูกต้อง ไม่มี Console Error | TODO | <img src="img/TC12.png" width="300" /> |
+| TC-06 All | เลือกตัวกรอง "ทั้งหมด" ระบบกลับมาแสดงคำร้องครบทุกรายการ | PASS | <img src="img/TC6.png" width="300" /> |
+| TC-07 Empty | เลือกสถานะที่ไม่พบรายการ แสดงข้อความ Empty State | PASS | <img src="img/TC7.png" width="300" /> |
+| TC-08 Delete | กดลบรายการ ลบข้อมูลตรงตาม ID และ Summary คำนวณใหม่ | PASS | <img src="img/TC8.png" width="300" /> |
+| TC-09 Mobile | แสดงผลบนขนาดหน้าจอ 375px สมบูรณ์ ไม่มี Horizontal Scroll | PASS | <img src="img/TC9.png" width="300" /> |
+| TC-10 Keyboard | สามารถใช้ปุ่ม Tab / Space / Enter โฟกัสและส่งฟอร์มได้ | PASS | <img src="img/TC10.png" width="300" /> |
+| TC-11 Build | รัน npm run build ผ่านสมบูรณ์ สร้างไฟล์ลง dist/ | PASS | <img src="img/TC11.png" width="300" /> |
+| TC-12 Pages | เปิดผ่าน GitHub Pages บน Incognito Mode ทำงานถูกต้อง ไม่มี Console Error | PASS | <img src="img/TC12.png" width="300" /> |
 
 ## Screenshots
 
