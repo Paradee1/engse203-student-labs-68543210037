@@ -1,3 +1,10 @@
 # Week 01 Evidence
 
-ใส่ screenshots, test output หรือ reflection ที่ไม่ใช่ข้อมูลลับ แล้วอ้างชื่อไฟล์ใน `../README.md`
+# engse203-lab01-68543210037-6
+ชื่อ-นามสกุล: ภารดี อ่อนละออ
+รหัสนักศึกษา: 68543210037-6
+ระบบปฏิบัติการที่ใช้: macOS / Windows
+npm run start
+ปัญหา:ไม่มี
+วิธีแก้: -
+![alt text](image-1.png)
