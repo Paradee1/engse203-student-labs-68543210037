@@ -15,18 +15,16 @@ function RequestDetailPage() {
 
   useEffect(() => {
     setLoadState('loading');
-    setErrorMessage('');
-
-    getRequestById(requestId)
-      .then((result) => {
-        setRequest(result);
-        setLoadState('success');
-      })
-      .catch((error) => {
-        setErrorMessage(error instanceof Error ? error.message : 'โหลดรายละเอียดไม่สำเร็จ');
-        setLoadState('error');
-      });
-    // TODO 5B: เพิ่ม cleanup guard เพื่อกัน stale update
+    getRequestById(requestId).then((result) => {
+      if (ignore) return;
+      setRequest(result);
+      setLoadState('success');
+    }).catch((error) => {
+      if (ignore) return;
+      setErrorMessage(error instanceof Error ? error.message : 'โหลดรายละเอียดไม่สำเร็จ');
+      setLoadState('error');
+    });
+    return () => { ignore = true; };
   }, [requestId, reloadKey]);
 
   return (
