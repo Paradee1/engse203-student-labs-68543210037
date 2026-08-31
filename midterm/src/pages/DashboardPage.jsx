@@ -52,13 +52,14 @@ function DashboardPage() {
   }), [requests]);
 
   const filteredRequests = requests.filter((request) => {
+    const matchStatus = statusFilter === 'all' || request.status === statusFilter;
     const query = searchTerm.trim().toLowerCase();
-    
-    return (
+    const matchSearch =
       query === '' ||
       (request.requesterName && request.requesterName.toLowerCase().includes(query)) ||
-      (request.details && request.details.toLowerCase().includes(query))
-    );
+      (request.details && request.details.toLowerCase().includes(query));
+
+    return matchStatus && matchSearch;
   });
 
   async function handleDelete(requestId) {
