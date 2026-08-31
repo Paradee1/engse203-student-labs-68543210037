@@ -51,15 +51,15 @@ function DashboardPage() {
     completed: requests.filter((request) => request.status === 'completed').length,
   }), [requests]);
 
-  const filteredRequests = statusFilter === 'all'
-    ? requests
-
-    : requests.filter((request) => request.status === statusFilter);
-
-  function handleRetry() {
-    if (scenario) setSearchParams({});
-    else reload();
-  }
+  const filteredRequests = requests.filter((request) => {
+    const query = searchTerm.trim().toLowerCase();
+    
+    return (
+      query === '' ||
+      (request.requesterName && request.requesterName.toLowerCase().includes(query)) ||
+      (request.details && request.details.toLowerCase().includes(query))
+    );
+  });
 
   async function handleDelete(requestId) {
     try {
