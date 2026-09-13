@@ -7,13 +7,13 @@ import { getRequestById } from '../services/requestService.js';
 
 function RequestDetailPage() {
   const { requestId } = useParams();
-  const [reloadKey, reload] = useManualReload();
-
   const [loadState, setLoadState] = useState('loading');
   const [request, setRequest] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [reloadKey, reload] = useManualReload();
 
   useEffect(() => {
+    let ignore = false;
     setLoadState('loading');
     getRequestById(requestId).then((result) => {
       if (ignore) return;
@@ -29,37 +29,17 @@ function RequestDetailPage() {
 
   return (
     <section data-testid="page-request-detail">
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow dark">ROUTED · DYNAMIC DETAIL</p>
-          <h1>รายละเอียดคำร้อง</h1>
-          <p>รหัสที่อ่านจาก URL: <code>{requestId}</code></p>
-        </div>
-      </div>
-
+      <div className="page-heading"><div><p className="eyebrow dark">DYNAMIC ROUTE</p><h1>รายละเอียดคำร้อง</h1><p>Request ID: <code>{requestId}</code></p></div></div>
       {loadState === 'loading' && <LoadingState message="กำลังโหลดรายละเอียด…" />}
       {loadState === 'error' && <ErrorState message={errorMessage} onRetry={reload} />}
-
       {loadState === 'success' && !request && (
-        <section className="state-card">
-          <h2>ไม่พบคำร้องรหัส {requestId}</h2>
-          <p>คำร้องนี้อาจถูกลบไปแล้ว หรือรหัสที่พิมพ์ไม่ถูกต้อง</p>
-          <Link className="button primary inline" to="/">กลับไปดูรายการทั้งหมด</Link>
-        </section>
+        <section className="state-card"><h2>ไม่พบคำร้อง</h2><p>ไม่พบข้อมูลสำหรับ ID <code>{requestId}</code></p><Link to="/">กลับ Dashboard</Link></section>
       )}
-
       {loadState === 'success' && request && (
         <article className="panel detail-card">
           <h2>{request.requestType}</h2>
-          <dl>
-            <div><dt>รหัสคำร้อง</dt><dd>{request.id}</dd></div>
-            <div><dt>ผู้แจ้ง</dt><dd>{request.requesterName}</dd></div>
-            <div><dt>สถานที่</dt><dd>{request.location}</dd></div>
-            <div><dt>รายละเอียด</dt><dd>{request.details}</dd></div>
-            <div><dt>ความเร่งด่วน</dt><dd>{request.priority === 'urgent' ? 'เร่งด่วน' : 'ปกติ'}</dd></div>
-            <div><dt>สถานะ</dt><dd><span className={`badge ${request.status}`}>{request.status}</span></dd></div>
-          </dl>
-          <Link className="button primary inline" to="/">กลับ Dashboard</Link>
+          <dl><div><dt>ID</dt><dd>{request.id}</dd></div><div><dt>ผู้แจ้ง</dt><dd>{request.requesterName}</dd></div><div><dt>สถานที่</dt><dd>{request.location}</dd></div><div><dt>รายละเอียด</dt><dd>{request.details}</dd></div><div><dt>ความเร่งด่วน</dt><dd>{request.priority}</dd></div><div><dt>สถานะ</dt><dd>{request.status}</dd></div></dl>
+          <Link to="/">กลับ Dashboard</Link>
         </article>
       )}
     </section>
