@@ -8,7 +8,7 @@ router.get('/', controller.listRequests);
 router.get('/:id', controller.getRequest);
 router.post('/', validateRequest, controller.createRequest);
 router.delete('/:id', controller.deleteRequest);
-
+router.put('/:id', controller.updateRequestStatus);
 /**
  * TODO W06-R1 (CP02, CP04, CP05) · ประกาศ route ทั้งหมด
  *
