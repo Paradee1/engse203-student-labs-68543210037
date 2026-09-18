@@ -11,6 +11,6 @@
   "notes": "ผ่าน automated checks 36/36 รายการ รวม Challenge ครบทั้ง AppError, asyncHandler และ Auto-retry",
   "pageUrl": "https://Paradee1.github.io/engse203-student-labs-68543210037/labs/week-07/",
   "sourceUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/tree/lab/week-07/labs/week-07/source",
-  "hasPublish": false,
+  "hasPublish": true,
   "sourceEntries": 5
 }
