@@ -30,6 +30,31 @@ async function parseError(response) {
   }
 }
 
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function fetchWithRetry(url, options, retries = 3, delay = 500) {
+  try {
+    const res = await fetch(url, options);
+
+    // เซิร์ฟเวอร์ล่มชั่วคราว (5xx) ให้ลองใหม่ตามจำนวนรอบ
+    if (res.status >= 500 && retries > 0) {
+      console.warn(`เซิร์ฟเวอร์ตอบ ${res.status} ลองใหม่อีกครั้งใน ${delay}ms...`);
+      await wait(delay);
+      return fetchWithRetry(url, options, retries - 1, delay * 2);
+    }
+
+    return res;
+  } catch (err) {
+    // เน็ตหลุด หรือ API ปิดอยู่ ลองใหม่
+    if (retries > 0) {
+      console.warn(`เชื่อมต่อไม่ได้ ลองใหม่อีกครั้งใน ${delay}ms...`);
+      await wait(delay);
+      return fetchWithRetry(url, options, retries - 1, delay * 2);
+    }
+    throw err;
+  }
+}
+
 /**
  * TODO W07-F2 (CP11) · เรียก API แล้วคืนข้อมูลที่ parse แล้ว
  *
