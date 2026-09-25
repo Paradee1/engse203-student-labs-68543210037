@@ -6,9 +6,12 @@ import { config } from '../config.js';
 import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 
+import { AppError } from '../middleware/errorHandler.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const API_ROOT = path.resolve(HERE, '../..');
+const DB_FILE = process.env.DB_FILE || path.resolve(API_ROOT, 'data/campus.db');
+const SCHEMA_FILE = path.resolve(API_ROOT, 'data/schema.sql');
 
 const db = new DatabaseSync(`${API_ROOT}/data/campus.db`);
 db.exec('PRAGMA foreign_keys = ON');
@@ -117,28 +120,39 @@ export function create(input) {
    *   นี่คือ "หน้าที่ของ service" ที่พูดถึงในบทที่ 9 ของสัปดาห์ที่แล้ว
    */
   const id = nextId();
-  db.prepare(
-    `INSERT INTO requests (id, requester_id, request_type, location, details, priority)
-     VALUES (?, ?, ?, ?, ?, ?)`
-  ).run(
-    id,
-    resolveUserId(input.requesterName.trim()),   // ← แปลงตรงนี้
-    input.requestType,
-    input.location.trim(),
-    input.details.trim(),
-    input.priority ?? 'normal'
-  );
-  return findById(id);   // คืนรูปแบบที่ frontend ต้องการ
+  db.exec('BEGIN');
+  try {
+    const requesterId = resolveUserId(input.requesterName.trim());
+    db.prepare(
+      `INSERT INTO requests (id, requester_id, request_type, location, details, priority)
+       VALUES (?, ?, ?, ?, ?, ?)`
+    ).run(
+      id,
+      requesterId,
+      input.requestType,
+      input.location.trim(),
+      input.details.trim(),
+      input.priority ?? 'normal'
+    );
+    db.exec('COMMIT');
+    return findById(id);
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw toAppError(err);
+  }
 }
 
 
 
 export function updateStatus(id, status) {
   /** TODO W10-6 (CP30) · UPDATE requests SET status = ? WHERE id = ? · ไม่พบคืน null */
-  const result = db.prepare('UPDATE requests SET status = ? WHERE id = ?')
-    .run(status, id);
-  return result.changes ? findById(id) : null;
-
+  try {
+    const result = db.prepare('UPDATE requests SET status = ? WHERE id = ?')
+      .run(status, id);
+    return result.changes ? findById(id) : null;
+  } catch (err) {
+    throw toAppError(err);
+  }
 }
 
 export function remove(id) {
@@ -147,4 +161,13 @@ export function remove(id) {
   if (!target) return null;         // ② ไม่พบ → null
   db.prepare('DELETE FROM requests WHERE id = ?').run(id);
   return target;
+}
+
+function toAppError(err) {
+  const m = err.message ?? '';
+  if (m.includes('FOREIGN KEY')) return new AppError('อ้างถึงข้อมูลที่ไม่มีอยู่จริงในระบบ', 400);
+  if (m.includes('CHECK'))       return new AppError('ค่าที่ส่งมาไม่อยู่ในรายการที่กำหนด', 400);
+  if (m.includes('UNIQUE'))      return new AppError('ข้อมูลนี้มีอยู่แล้วในระบบ', 409);
+  if (m.includes('NOT NULL'))    return new AppError('กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน', 400);
+  return err; // กรณี error อื่น ๆ ปล่อยผ่านเพื่อให้ errorHandler ตอบ 500
 }

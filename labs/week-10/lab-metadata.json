@@ -1,0 +1,12 @@
+{
+  "week": "week-10",
+  "title": "Node.js Database Integration",
+  "status": "submitted",
+  "sourceOrigin": "course-starter",
+  "originalRepoUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037",
+  "originalCommit": "",
+  "pullRequestUrl": "",
+  "submissionTag": "lab-10-submission-v1",
+  "testStatus": "pass",
+  "notes": "ผ่านการตรวจสอบ check-week10.mjs (31/31), check-week07.mjs (36/36) และ npm test ครบถ้วน"
+}
