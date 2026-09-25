@@ -107,5 +107,37 @@
     "sourceUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/tree/lab/week-07/labs/week-07/source",
     "hasPublish": true,
     "sourceEntries": 5
+  },
+  {
+    "week": "week-09",
+    "title": "Relational Database & SQL",
+    "status": "submitted",
+    "sourceOrigin": "course-starter",
+    "originalRepoUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037",
+    "originalCommit": "13b0957",
+    "pullRequestUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/pull/40",
+    "submissionTag": "lab-09-submission-v1",
+    "testStatus": "pass",
+    "notes": "ผ่านการตรวจสอบครบ 30/30 รายการ (รวม Challenge)",
+    "pageUrl": "https://Paradee1.github.io/engse203-student-labs-68543210037/labs/week-09/",
+    "sourceUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/tree/lab/week-09/labs/week-09/source",
+    "hasPublish": false,
+    "sourceEntries": 6
+  },
+  {
+    "week": "week-10",
+    "title": "Node.js Database Integration",
+    "status": "submitted",
+    "sourceOrigin": "course-starter",
+    "originalRepoUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037",
+    "originalCommit": "433cdad",
+    "pullRequestUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/pull/41",
+    "submissionTag": "lab-10-submission-v1",
+    "testStatus": "pass",
+    "notes": "ผ่านการตรวจสอบ check-week10.mjs (31/31), check-week07.mjs (36/36) และ npm test ครบถ้วน",
+    "pageUrl": "https://Paradee1.github.io/engse203-student-labs-68543210037/labs/week-10/",
+    "sourceUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/tree/lab/week-10/labs/week-10/source",
+    "hasPublish": true,
+    "sourceEntries": 5
   }
 ]
