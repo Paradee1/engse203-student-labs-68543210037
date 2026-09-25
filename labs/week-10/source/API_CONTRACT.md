@@ -1,27 +1,10 @@
-# API Contract — Campus Service Request API
-
-**เวอร์ชัน:** 2.0.0 · **Base URL:** `http://localhost:3001`
-**รูปแบบข้อมูล:** JSON (`Content-Type: application/json`)
-
-> **API Contract คืออะไร** — ข้อตกลงระหว่างคนทำ front-end กับคนทำ back-end
-> ว่าจะคุยกันด้วย endpoint อะไร ส่งอะไรไป ได้อะไรกลับ
-> มีไว้เพื่อให้สองฝั่ง**ทำงานคู่ขนานกันได้** โดยไม่ต้องรอกัน
-
 ---
 
-## โครงสร้างข้อมูล Request
+## การเปลี่ยนแปลงในเวอร์ชัน 2.0.0 (Week 10 - Database Integration)
 
-| field | ชนิด | คำอธิบาย | ตัวอย่าง |
-|---|---|---|---|
-| `id` | string | รหัสคำร้อง · ขึ้นต้นด้วย `REQ-` · เซิร์ฟเวอร์สร้างให้ | `"REQ-001"` |
-| `requesterName` | string | ชื่อผู้แจ้ง · อย่างน้อย 2 ตัวอักษร | `"สมชาย ใจดี"` |
-| `requestType` | string | ประเภท · 1 ใน 4 ค่าที่กำหนด | `"แจ้งซ่อม"` |
-| `location` | string | สถานที่ · ห้ามว่าง | `"ห้องปฏิบัติการ 301"` |
-| `details` | string | รายละเอียด · อย่างน้อย 10 ตัวอักษร | `"เครื่องปรับอากาศไม่ทำงาน"` |
-| `priority` | string | `"normal"` หรือ `"urgent"` | `"urgent"` |
-| `status` | string | `"pending"` · `"in-progress"` · `"completed"` | `"pending"` |
-
-**ค่าที่ยอมรับของ `requestType`** — `แจ้งซ่อม` · `บริการบัญชีผู้ใช้` · `ขอใช้อุปกรณ์` · `อื่น ๆ`
+### ประวัติการเปลี่ยนแปลง (Revision History)
+* **v2.0.0** (Week 10): เปลี่ยนระบบจัดเก็บข้อมูลจากไฟล์ JSON เป็นฐานข้อมูลเชิงสัมพันธ์ SQLite (`campus.db`) ปรับปรุงการจัดการ Database Constraint Errors และเพิ่มการแปลงข้อมูลระหว่าง Database กับ API Payload
+* **v1.0.0** (Week 06/07): รองรับ RESTful API ขั้นพื้นฐานและจำลองการเก็บข้อมูลในหน่วยความจำ/ไฟล์ JSON
 
 ---
 
@@ -36,154 +19,95 @@
 | `PUT` | `/api/requests/:id` | เปลี่ยนสถานะ | `{ "status": "..." }` | `200` + object ที่แก้แล้ว | `400` สถานะผิด · `404` ไม่พบ |
 | `DELETE` | `/api/requests/:id` | ลบคำร้อง | — | `204` ไม่มี body | `404` ไม่พบ |
 
----
+### รายละเอียดแต่ละ Endpoint
 
-## ตัวอย่างการเรียกใช้
+#### 1. GET /api/requests
+ดึงรายการคำร้องทั้งหมดในระบบ คืนค่าเป็น Array
 
-### GET /api/requests
+#### 2. GET /api/requests/:id
+ดึงข้อมูลคำร้องตามรหัสคำร้อง คืนค่าเป็น Object หากไม่พบจะตอบ 404
 
-```http
-GET /api/requests HTTP/1.1
-Host: localhost:3001
-```
+#### 3. POST /api/requests
+สร้างคำร้องขอรับบริการใหม่ คืนค่า 201 Created
 
-```json
-[
-  {
-    "id": "REQ-001",
-    "requesterName": "สมชาย ใจดี",
-    "requestType": "แจ้งซ่อม",
-    "location": "ห้องปฏิบัติการ 301",
-    "details": "เครื่องปรับอากาศไม่ทำงานตั้งแต่เช้า",
-    "priority": "urgent",
-    "status": "pending"
-  }
-]
-```
+#### 4. PUT /api/requests/:id
+อัปเดตสถานะของคำร้อง (status) คืนค่า 200 OK
 
-### POST /api/requests
+#### 5. DELETE /api/requests/:id
+ลบคำร้องออกจากระบบ คืนค่า 204 No Content
 
-```http
-POST /api/requests HTTP/1.1
-Content-Type: application/json
+### ① Data Model (แบบจำลองฐานข้อมูล)
 
-{
-  "requesterName": "สุภาวดี รักเรียน",
-  "requestType": "ขอใช้อุปกรณ์",
-  "location": "ห้องประชุม 2",
-  "details": "ขอยืมโปรเจกเตอร์สำหรับนำเสนอ",
-  "priority": "normal"
-}
-```
+ระบบใช้ฐานข้อมูล SQLite ประกอบด้วย 2 ตารางที่มีความสัมพันธ์กัน:
 
-**201 Created**
+#### 1. ตาราง `users` (ข้อมูลผู้ใช้งาน)
+| คอลัมน์ | ชนิดข้อมูล | ข้อกำหนด (Constraints) | คำอธิบาย |
+| :--- | :--- | :--- | :--- |
+| `id` | INTEGER | PRIMARY KEY AUTOINCREMENT | รหัสประจำตัวผู้ใช้ |
+| `name` | TEXT | NOT NULL | ชื่อ-นามสกุลของผู้ใช้ |
+| `department` | TEXT | NOT NULL DEFAULT 'ไม่ระบุ' | แผนก/หน่วยงาน |
+| `email` | TEXT | NOT NULL UNIQUE | อีเมลผู้ใช้งาน |
 
-```json
-{
-  "id": "REQ-MTYOA3MX-YEX9",
-  "requesterName": "สุภาวดี รักเรียน",
-  "requestType": "ขอใช้อุปกรณ์",
-  "location": "ห้องประชุม 2",
-  "details": "ขอยืมโปรเจกเตอร์สำหรับนำเสนอ",
-  "priority": "normal",
-  "status": "pending"
-}
-```
-
-**400 Bad Request** — เมื่อข้อมูลไม่ถูกต้อง
-
-```json
-{
-  "error": "ข้อมูลคำร้องไม่ถูกต้อง",
-  "details": [
-    "ชื่อผู้แจ้งต้องมีอย่างน้อย 2 ตัวอักษร",
-    "รายละเอียดต้องมีอย่างน้อย 10 ตัวอักษร"
-  ]
-}
-```
-
-### PUT /api/requests/:id
-
-```http
-PUT /api/requests/REQ-001 HTTP/1.1
-Content-Type: application/json
-
-{ "status": "in-progress" }
-```
-
-**200 OK** — คืนคำร้องที่อัปเดตแล้ว
-
-### DELETE /api/requests/:id
-
-**204 No Content** — ไม่มี body ส่งกลับ
+#### 2. ตาราง `requests` (ข้อมูลคำร้องขอรับบริการ)
+| คอลัมน์ | ชนิดข้อมูล | ข้อกำหนด (Constraints) | คำอธิบาย |
+| :--- | :--- | :--- | :--- |
+| `id` | TEXT | PRIMARY KEY | รหัสคำร้อง เช่น `REQ-001` |
+| `requester_id` | INTEGER | NOT NULL, REFERENCES users(id) | รหัสผู้แจ้ง (เชื่อมโยงไปยัง `users.id`) |
+| `request_type` | TEXT | NOT NULL, CHECK (request_type IN ('แจ้งซ่อม', 'บริการบัญชีผู้ใช้', 'ขอใช้อุปกรณ์', 'อื่น ๆ')) | ประเภทของคำร้อง |
+| `location` | TEXT | NOT NULL | สถานที่เกิดเหตุ/ต้องการบริการ |
+| `details` | TEXT | NOT NULL | รายละเอียดคำร้อง |
+| `priority` | TEXT | NOT NULL DEFAULT 'normal', CHECK (priority IN ('normal', 'urgent')) | ระดับความเร่งด่วน |
+| `status` | TEXT | NOT NULL DEFAULT 'pending', CHECK (status IN ('pending', 'in-progress', 'completed')) | สถานะการดำเนินงาน |
+| `created_at` | TEXT | NOT NULL DEFAULT CURRENT_TIMESTAMP | วันที่และเวลาที่บันทึกข้อมูล |
 
 ---
 
-## รูปแบบ Error
+### ② ข้อสังเกตเรื่องรูปแบบ (Schema vs. API Payload Mapping)
 
-ทุก error ตอบเป็น JSON ที่มี field `error` เสมอ
+โครงสร้างที่จัดเก็บจริงในฐานข้อมูลไม่เหมือนกับรูปแบบ JSON ที่ API ตอบกลับไปยัง Client:
 
-```json
-{ "error": "ข้อความที่ผู้ใช้ทั่วไปอ่านเข้าใจ" }
-```
-
-กรณี validation จะมี `details` เพิ่มมาเป็น array บอกว่าผิดตรงไหนบ้าง
-
-| Status | เมื่อไหร่ | ฝั่งไหนผิด |
-|---|---|---|
-| `400` | ข้อมูลที่ส่งมาไม่ถูกต้อง | ผู้ใช้ |
-| `404` | ไม่พบทรัพยากรที่ขอ | ผู้ใช้ |
-| `500` | โค้ดเซิร์ฟเวอร์ผิดพลาด | เซิร์ฟเวอร์ |
-
-> **ตอน production จะไม่ส่ง stack trace กลับไป** — เปิดเผยโครงสร้างภายในให้คนภายนอกเห็นไม่ได้
+* **Normalization ในฐานข้อมูล:** ตาราง `requests` จัดเก็บเพียง `requester_id` (INTEGER Foreign Key) เพื่อตัดความซ้ำซ้อนของข้อมูลผู้ใช้งาน (ตามหลัก 3NF)
+* **Frontend-Friendly ใน API:** Frontend ต้องการฟิลด์ `requesterName` (TEXT) ไปแสดงผลบนหน้าจอโดยตรง เพื่อลดภาระการยิง API ซ้ำซ้อน
+* **บทบาทของ Service Layer:** ฟังก์ชันใน `requestService.js` ทำหน้าที่เป็น Adapter ด้วยการใช้คำสั่ง `JOIN users u ON r.requester_id = u.id` พร้อมกำหนด `u.name AS requesterName` ในฝั่ง Query เพื่อรักษา API Contract เดิมไว้โดยไม่ต้องแก้ไข Frontend
 
 ---
 
-## CORS
+### ③ พฤติกรรมสำคัญของ `POST /api/requests` (Auto User Resolution)
 
-API อนุญาตให้เรียกจาก origin ที่กำหนดใน `CORS_ORIGIN` เท่านั้น
+* **การสร้างผู้ใช้อัตโนมัติ (Auto Provisioning):** เมื่อมีการส่งคำร้องใหม่ผ่าน `POST /api/requests` และระบุ `requesterName` เข้ามา ฟังก์ชัน `resolveUserId()` จะทำการค้นหาชื่อดังกล่าวในตาราง `users` ก่อน:
+  * หากพบชื่อในระบบ: จะใช้ `id` เดิมของผู้ใช้นั้นมาผูกกับ `requester_id`
+  * หากไม่พบชื่อในระบบ: ระบบจะสร้างระเบียนผู้ใช้ใหม่ลงในตาราง `users` ให้อัตโนมัติทันที โดยสร้างอีเมลจำลอง (`user-<timestamp>@rmutl.ac.th`) และตั้งค่าแผนกเป็น `'ไม่ระบุ'`
+* **ข้อควรระวัง:** การเรียกใช้ Endpoint นี้โดยส่งชื่อที่ไม่ตรงกันแม้เพียงเล็กน้อย (เช่น พิมพ์วรรคผิดหรือพิมพ์ตก) จะทำให้เกิด User ขยะขึ้นในระบบได้
 
-```
-Access-Control-Allow-Origin: http://localhost:5173
-```
+# Data Model
 
-**ถ้าเรียกจาก origin อื่น** เบราว์เซอร์จะบล็อกก่อนที่โค้ดจะได้เห็น response — จะเห็น error ใน Console ว่าถูกบล็อกโดย CORS policy
+## ฐานข้อมูล (Database Schema)
 
-> ⚠ CORS เป็นกลไกของ **เบราว์เซอร์** เท่านั้น · Postman และ curl ไม่ถูกบล็อก เพราะไม่ใช่เบราว์เซอร์
+ระบบใช้งานฐานข้อมูล SQLite (`campus.db`) สำหรับจัดเก็บข้อมูล โดยมีโครงสร้างตารางดังนี้:
 
----
+### ตาราง users
+- `id` INTEGER PRIMARY KEY AUTOINCREMENT
+- `name` TEXT NOT NULL
+- `department` TEXT NOT NULL DEFAULT 'ไม่ระบุ'
+- `email` TEXT NOT NULL UNIQUE
 
-## Environment Variables
-
-### ฝั่ง API (`api/.env`)
-
-| ตัวแปร | ค่าเริ่มต้น | คำอธิบาย |
-|---|---|---|
-| `PORT` | `3001` | พอร์ตที่ API รับคำขอ |
-| `CORS_ORIGIN` | `http://localhost:5173` | origin ที่อนุญาตให้เรียก |
-| `NODE_ENV` | `development` | `production` จะเปลี่ยนรูปแบบ log และซ่อน stack trace |
-
-### ฝั่ง Frontend (`frontend/.env.local`)
-
-| ตัวแปร | ค่าเริ่มต้น | คำอธิบาย |
-|---|---|---|
-| `VITE_API_BASE_URL` | `http://localhost:3001` | ที่อยู่ของ API |
-
-> **ต้องขึ้นต้นด้วย `VITE_`** ไม่งั้น Vite จะไม่ส่งค่าไปให้โค้ดฝั่งเบราว์เซอร์
-> และ**ห้าม commit ไฟล์ `.env`** — ใช้ `.env.example` เป็นตัวอย่างแทน
+### ตาราง requests
+- `id` TEXT PRIMARY KEY
+- `requester_id` INTEGER NOT NULL REFERENCES users(id)
+- `request_type` TEXT NOT NULL CHECK (request_type IN ('แจ้งซ่อม', 'บริการบัญชีผู้ใช้', 'ขอใช้อุปกรณ์', 'อื่น ๆ'))
+- `location` TEXT NOT NULL
+- `details` TEXT NOT NULL
+- `priority` TEXT NOT NULL DEFAULT 'normal' CHECK (priority IN ('normal', 'urgent'))
+- `status` TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in-progress', 'completed'))
+- `created_at` TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 
 ---
 
-## การรันทั้งระบบ
+## ข้อสังเกตเรื่องรูปแบบข้อมูล (Data Mapping)
+- ในฐานข้อมูลเก็บ `requester_id` เพื่อลดความซ้ำซ้อนตามหลัก Normalization
+- แต่ API ส่งออก `requesterName` โดยใช้การ JOIN เพื่อให้ Frontend ใช้งานได้ทันที
 
-ต้องเปิด **2 terminal** พร้อมกัน
+---
 
-```bash
-# Terminal 1 — API
-cd api && npm run dev          # http://localhost:3001
-
-# Terminal 2 — Frontend
-cd frontend && npm run dev     # http://localhost:5173
-```
-
-**ลำดับสำคัญ** — เปิด API ก่อนเสมอ ไม่งั้น frontend จะขึ้นข้อความว่าติดต่อเซิร์ฟเวอร์ไม่ได้
+## พฤติกรรมของ POST (สร้าง User อัตโนมัติ)
+- เมื่อส่งคำร้องใหม่ผ่าน `POST /api/requests` หากส่ง `requesterName` ที่ยังไม่มีในระบบ ระบบจะสร้าง user ใหม่ในตาราง `users` ให้อัตโนมัติ
