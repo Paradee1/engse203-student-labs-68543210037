@@ -1,26 +1,13 @@
 {
-  "name": "engse203-week06-campus-api",
-  "version": "2.0.0",
-  "type": "module",
+  "name": "campus-service",
+  "private": true,
+  "description": "ENGSE203 Week 11 — ระบบ full-stack (starter)",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "node --disable-warning=ExperimentalWarning --watch --env-file=.env src/server.js",
-    "start": "node --disable-warning=ExperimentalWarning src/server.js",
-    "check": "node scripts/check-project.mjs",
-    "test": "node --disable-warning=ExperimentalWarning --test \"tests/*.test.js\"",
-    "db:setup": "node --disable-warning=ExperimentalWarning scripts/setup-db.mjs",
-    "db:reset": "node --disable-warning=ExperimentalWarning scripts/setup-db.mjs --force"
-  },
-  "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.1.0",
-    "morgan": "^1.12.1"
-  },
-  "devDependencies": {
-    "supertest": "^7.2.2",
-    "vitest": "^5.0.2"
+    "build": "npm install --prefix api && npm install --prefix frontend --include=dev && npm run build --prefix frontend",
+    "start": "npm start --prefix api",
+    "check": "node --disable-warning=ExperimentalWarning check-week11.mjs"
   }
 }
