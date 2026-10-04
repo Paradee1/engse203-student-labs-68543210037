@@ -16,7 +16,6 @@ const API_ROOT = path.resolve(HERE, '..');
 export const config = {
   env: process.env.NODE_ENV ?? 'development',
   // TODO: เพิ่ม isProd, port, corsOrigin, dbFile, schemaFile, staticDir
-  dbFile: process.env.DB_FILE ?? path.join(API_ROOT, 'data', 'campus.db'),
   schemaFile: path.join(API_ROOT, 'data', 'schema.sql'),
   isProd:     process.env.NODE_ENV === 'production',
   port:       Number(process.env.PORT ?? 3001),
