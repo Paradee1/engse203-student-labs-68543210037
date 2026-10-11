@@ -7,7 +7,7 @@
   "originalCommit": "be9491f",
   "pullRequestUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/pull/53",
   "submissionTag": "lab-12-submission-v1",
-  "demoUrl": "",
+  "demoUrl": "https://campus-service-68543210037-week-12.onrender.com/",
   "testStatus": "pass",
   "notes": "ผ่านการตรวจสอบ check-week12.mjs --inclass (20/20), แก้ไข bug ครบตาม checkpoint และ integration tests ใน api ผ่านเรียบร้อย"
 }
