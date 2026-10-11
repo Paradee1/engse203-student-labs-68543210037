@@ -12,10 +12,17 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const API_ROOT = path.resolve(HERE, '..');
 
+const isProd = process.env.NODE_ENV === 'production';
+const rawJwtSecret = process.env.JWT_SECRET?.trim();
+
+if (isProd && !rawJwtSecret) {
+  throw new Error('JWT_SECRET ต้องถูกกำหนดในสภาพแวดล้อม production');
+}
+
 export const config = {
   // สภาพแวดล้อม — 'development' หรือ 'production'
   env: process.env.NODE_ENV ?? 'development',
-  isProd: process.env.NODE_ENV === 'production',
+  isProd,
 
   // พอร์ตของ API
   port: Number(process.env.PORT ?? 3001),
