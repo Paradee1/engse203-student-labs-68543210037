@@ -7,7 +7,7 @@
   "originalCommit": "f9f26a4",
   "pullRequestUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/pull/52",
   "submissionTag": "lab-13-submission-v1",
-  "demoUrl": "",
+  "demoUrl": "https://engse203-student-labs-68543210037-6-week.onrender.com/",
   "testStatus": "pass",
   "notes": "ผ่านการตรวจสอบ check-week13.mjs (27/27: In-Class 23/23 + Challenge 4/4), check-week12.mjs (20/20) และ npm test api ผ่าน 68/68 เรียบร้อย"
 }
