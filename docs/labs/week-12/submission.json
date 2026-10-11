@@ -1,0 +1,17 @@
+{
+  "week": "week-12",
+  "title": "Software Testing & Debugging (A4)",
+  "status": "submitted",
+  "sourceOrigin": "course-starter",
+  "originalRepoUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037",
+  "originalCommit": "be9491f",
+  "pullRequestUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/pull/53",
+  "submissionTag": "lab-12-submission-v1",
+  "demoUrl": "https://campus-service-68543210037-week-12.onrender.com/",
+  "testStatus": "pass",
+  "notes": "ผ่านการตรวจสอบ check-week12.mjs --inclass (20/20), แก้ไข bug ครบตาม checkpoint และ integration tests ใน api ผ่านเรียบร้อย",
+  "pageUrl": "https://Paradee1.github.io/engse203-student-labs-68543210037/labs/week-12/",
+  "sourceUrl": "https://github.com/Paradee1/engse203-student-labs-68543210037/tree/lab/week-12/labs/week-12/source",
+  "hasPublish": false,
+  "sourceEntries": 2
+}
